@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.gibhub.dreamshops.exceptions.ProductNotFoundException;
+import com.gibhub.dreamshops.exceptions.ResourceNotFoundException;
 import com.gibhub.dreamshops.models.Category;
 import com.gibhub.dreamshops.models.Product;
 import com.gibhub.dreamshops.repository.CategoryRepository;
@@ -48,13 +48,13 @@ public class ProductService implements IProductService {
     @Override
     public Product getProductById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 
     @Override
     public void deleteProduct(Long id) {
         productRepository.findById(id).ifPresentOrElse(productRepository::delete, () -> {
-            throw new ProductNotFoundException("Product not found");
+            throw new ResourceNotFoundException("Product not found");
         });
     }
 
@@ -63,7 +63,7 @@ public class ProductService implements IProductService {
         return productRepository.findById(productId)
                 .map(existingProduct -> updateExistingProduct((existingProduct), request))
                 .map(productRepository::save)
-                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 
     private Product updateExistingProduct(Product existingProduct, UpdateProductRequest request) {
@@ -92,7 +92,7 @@ public class ProductService implements IProductService {
 
     @Override
     public List<Product> getProductsByBrand(String brand) {
-        return productRepository.findByBrandName(brand);
+        return productRepository.findByBrand(brand);
     }
 
     @Override

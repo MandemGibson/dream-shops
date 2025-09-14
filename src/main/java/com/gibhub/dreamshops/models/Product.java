@@ -3,6 +3,8 @@ package com.gibhub.dreamshops.models;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,9 +34,11 @@ public class Product {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
+    @JsonIgnoreProperties("products")
     private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("product")
     private List<Image> images;
 
     public Product(String name, String brand, BigDecimal price, int inventory, String description,
